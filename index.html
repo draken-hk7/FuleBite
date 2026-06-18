@@ -8,7 +8,7 @@
       name="description"
       content="Shop FuelBite Protein Energy Balls, a dry fruits and seeds blend with high protein, no added sugar, natural fats, and on-the-go nutrition."
     >
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260618-whatsapp">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -16,7 +16,7 @@
     <div class="utility-bar" role="region" aria-label="Store highlights">
       <span>Calicut made</span>
       <span>No added sugar</span>
-      <span>12-bite combo pack INR 400</span>
+      <span>WhatsApp orders</span>
     </div>
 
     <header class="site-header">
@@ -54,8 +54,8 @@
             <path d="M20.2 5.8c-1.7-1.7-4.4-1.7-6.1 0L12 7.9 9.9 5.8a4.3 4.3 0 0 0-6.1 6.1L12 20l8.2-8.1a4.3 4.3 0 0 0 0-6.1Z"></path>
           </svg>
         </button>
-        <button class="bag-button" type="button" aria-label="Open bag">
-          <span>Bag</span>
+        <button class="bag-button" type="button" aria-label="Open order summary">
+          <span>Order</span>
           <strong data-cart-count>0</strong>
         </button>
       </div>
@@ -69,14 +69,20 @@
             Dry Fruits &amp; Seeds Blend built for real nutrition, real performance, and a clean snack routine before training, after training, or between busy hours.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#shop">
-              Shop 12 bites
+            <a class="button button-whatsapp hero-whatsapp-link" href="https://wa.me/919847217286" target="_blank" rel="noopener">
+              Order on WhatsApp
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M5 12h13"></path>
                 <path d="m13 6 6 6-6 6"></path>
               </svg>
             </a>
-            <a class="button button-ghost" href="#nutrition">See nutrition</a>
+            <a class="button button-primary" href="#shop">
+              Build pack
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h13"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </a>
           </div>
           <dl class="hero-proof" aria-label="FuelBite product facts">
             <div>
@@ -146,8 +152,11 @@
             </p>
 
             <div class="price-row">
-              <strong>INR <span data-total-price>400</span></strong>
-              <span>MRP incl. all taxes</span>
+              <div>
+                <strong>INR <span data-total-price>400</span></strong>
+                <span>MRP incl. all taxes</span>
+              </div>
+              <a class="quick-whatsapp-link" href="https://wa.me/919847217286" target="_blank" rel="noopener">Ask on WhatsApp</a>
             </div>
 
             <div class="pack-options" role="radiogroup" aria-label="Choose pack quantity">
@@ -172,7 +181,7 @@
                 <button type="button" data-quantity-change="1" aria-label="Increase quantity">+</button>
               </div>
               <button class="button button-primary add-button" type="button">
-                Add to bag
+                Add to order
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M5 12h13"></path>
                   <path d="m13 6 6 6-6 6"></path>
@@ -394,10 +403,10 @@
     </footer>
 
     <div class="cart-backdrop" data-cart-backdrop hidden></div>
-    <aside class="cart-drawer" aria-hidden="true" aria-label="Shopping bag">
+    <aside class="cart-drawer" aria-hidden="true" aria-label="Order summary">
       <div class="cart-head">
-        <h2>Your bag</h2>
-        <button class="icon-button" type="button" data-close-cart aria-label="Close bag">
+        <h2>Your order</h2>
+        <button class="icon-button" type="button" data-close-cart aria-label="Close order summary">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="m6 6 12 12"></path>
             <path d="m18 6-12 12"></path>
@@ -411,8 +420,9 @@
         <span>Total</span>
         <strong>INR <span data-cart-total>0</span></strong>
       </div>
-      <a class="button button-primary checkout-link" href="tel:+919847217286">
-        Call to order
+      <p class="whatsapp-note">Tap below to send your order details directly on WhatsApp.</p>
+      <a class="button button-whatsapp checkout-link" data-whatsapp-link href="https://wa.me/919847217286" target="_blank" rel="noopener">
+        Send order on WhatsApp
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M5 12h13"></path>
           <path d="m13 6 6 6-6 6"></path>
@@ -422,7 +432,15 @@
 
     <div class="search-status" aria-live="polite" data-search-status></div>
 
-    <script src="script.js"></script>
+    <div class="mobile-order-bar" aria-label="Mobile order bar">
+      <div>
+        <span>FuelBite Combo</span>
+        <strong>INR <span data-mobile-total>400</span></strong>
+      </div>
+      <a class="button button-whatsapp" data-whatsapp-link href="https://wa.me/919847217286" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+
+    <script src="script.js?v=20260618-whatsapp"></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",

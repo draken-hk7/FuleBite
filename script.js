@@ -1,5 +1,6 @@
 const basePrice = 400;
 const productName = "FuelBite Combo Pack";
+const whatsappNumber = "919847217286";
 
 const state = {
   packs: 1,
@@ -16,15 +17,21 @@ const cartTotal = document.querySelector("[data-cart-total]");
 const cartDrawer = document.querySelector(".cart-drawer");
 const cartBackdrop = document.querySelector("[data-cart-backdrop]");
 const searchStatus = document.querySelector("[data-search-status]");
+const mobileTotal = document.querySelector("[data-mobile-total]");
+const selectionWhatsappLinks = document.querySelectorAll(".hero-whatsapp-link, .quick-whatsapp-link, .mobile-order-bar a");
+const checkoutWhatsappLinks = document.querySelectorAll(".checkout-link");
 
 function formatPrice(value) {
   return new Intl.NumberFormat("en-IN").format(value);
 }
 
 function updateSelection() {
-  totalPrice.textContent = formatPrice(basePrice * state.packs * state.quantity);
+  const selectedTotal = basePrice * state.packs * state.quantity;
+  totalPrice.textContent = formatPrice(selectedTotal);
+  mobileTotal.textContent = formatPrice(selectedTotal);
   quantityOutput.value = state.quantity;
   quantityOutput.textContent = state.quantity;
+  updateWhatsAppLinks();
 }
 
 function renderCart() {
@@ -32,7 +39,8 @@ function renderCart() {
   cartTotal.textContent = formatPrice(state.cartTotal);
 
   if (!state.cartPacks) {
-    cartBody.innerHTML = "<p>Your bag is ready for FuelBite.</p>";
+    cartBody.innerHTML = "<p>Choose your packs, then send the order on WhatsApp.</p>";
+    updateWhatsAppLinks();
     return;
   }
 
@@ -46,6 +54,39 @@ function renderCart() {
       <strong>INR ${formatPrice(state.cartTotal)}</strong>
     </div>
   `;
+  updateWhatsAppLinks();
+}
+
+function getOrderSnapshot(preferCart) {
+  const useCart = preferCart && state.cartPacks;
+  const packs = useCart ? state.cartPacks : state.packs * state.quantity;
+  const total = useCart ? state.cartTotal : basePrice * state.packs * state.quantity;
+  const bites = packs * 12;
+  return { packs, total, bites };
+}
+
+function buildWhatsAppUrl(preferCart) {
+  const order = getOrderSnapshot(preferCart);
+  const message = [
+    "Hi FuelBite, I want to order:",
+    `${productName}`,
+    `Quantity: ${order.packs} pack${order.packs > 1 ? "s" : ""} / ${order.bites} bites`,
+    `Total: INR ${formatPrice(order.total)}`,
+    "Please confirm availability and delivery details."
+  ].join("\n");
+
+  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+}
+
+function updateWhatsAppLinks() {
+  const selectionUrl = buildWhatsAppUrl(false);
+  const checkoutUrl = buildWhatsAppUrl(true);
+  selectionWhatsappLinks.forEach((link) => {
+    link.href = selectionUrl;
+  });
+  checkoutWhatsappLinks.forEach((link) => {
+    link.href = checkoutUrl;
+  });
 }
 
 function openCart() {
