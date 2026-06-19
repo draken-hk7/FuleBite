@@ -1,4 +1,4 @@
-const basePrice = 400;
+const basePrice = 499;
 const productName = "FuelBite Combo Pack";
 const whatsappNumber = "919847217286";
 const couponCode = "FIRSTBITE";
@@ -14,6 +14,8 @@ const state = {
 const totalPrice = document.querySelector("[data-total-price]");
 const regularPrice = document.querySelector("[data-regular-price]");
 const discountAmount = document.querySelector("[data-discount-amount]");
+const staticBasePrices = document.querySelectorAll("[data-base-price]");
+const staticOfferPrices = document.querySelectorAll("[data-offer-price]");
 const quantityOutput = document.querySelector("[data-quantity]");
 const cartCount = document.querySelector("[data-cart-count]");
 const cartBody = document.querySelector("[data-cart-body]");
@@ -39,6 +41,18 @@ function formatPrice(value) {
 
 function getDiscount(subtotal) {
   return Math.round(subtotal * discountRate);
+}
+
+function updateStaticPricing() {
+  const firstOrderDiscount = getDiscount(basePrice);
+  const firstOrderTotal = basePrice - firstOrderDiscount;
+
+  staticBasePrices.forEach((element) => {
+    element.textContent = formatPrice(basePrice);
+  });
+  staticOfferPrices.forEach((element) => {
+    element.textContent = formatPrice(firstOrderTotal);
+  });
 }
 
 function updateSelection() {
@@ -423,6 +437,7 @@ function initScrollReveals() {
   });
 }
 
+updateStaticPricing();
 updateSelection();
 renderCart();
 initHeroMotion();
