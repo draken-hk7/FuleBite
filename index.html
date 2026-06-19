@@ -8,14 +8,14 @@
       name="description"
       content="Shop FuelBite Protein Energy Balls, a dry fruits and seeds blend with high protein, no added sugar, natural fats, and on-the-go nutrition."
     >
-    <link rel="stylesheet" href="styles.css?v=20260618-whatsapp">
+    <link rel="stylesheet" href="styles.css?v=20260619-offer-scroll">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
     <div class="utility-bar" role="region" aria-label="Store highlights">
       <span>Calicut made</span>
-      <span>No added sugar</span>
+      <span>FIRSTBITE 20% off</span>
       <span>WhatsApp orders</span>
     </div>
 
@@ -62,7 +62,7 @@
     </header>
 
     <main id="main">
-      <section class="hero" id="top" aria-labelledby="hero-title">
+      <section class="hero" id="top" aria-labelledby="hero-title" data-hero>
         <div class="hero-copy">
           <h1 id="hero-title">FuelBite Protein Energy Balls</h1>
           <p>
@@ -84,20 +84,14 @@
               </svg>
             </a>
           </div>
-          <dl class="hero-proof" aria-label="FuelBite product facts">
-            <div>
-              <dt>Protein</dt>
-              <dd>5.5-6.5 g</dd>
-            </div>
-            <div>
-              <dt>Added sugar</dt>
-              <dd>0 g</dd>
-            </div>
-            <div>
-              <dt>Pack</dt>
-              <dd>336 g</dd>
-            </div>
-          </dl>
+          <div class="hero-offer" aria-label="First order coupon offer">
+            <span>First order offer</span>
+            <strong>20% OFF</strong>
+            <button class="coupon-code" type="button" data-copy-coupon aria-label="Copy coupon code FIRSTBITE">
+              <span>Coupon code</span>
+              <b>FIRSTBITE</b>
+            </button>
+          </div>
         </div>
 
         <div class="hero-stage" aria-label="FuelBite product">
@@ -107,12 +101,32 @@
           <div class="hero-price">
             <span>Combo pack</span>
             <strong>12 bites</strong>
-            <em>INR 400</em>
+            <em><s>INR 400</s> INR 320 after coupon</em>
           </div>
         </div>
+        <a class="scroll-cue" href="#shop" aria-label="Scroll to shop section">
+          <span></span>
+          <span></span>
+        </a>
       </section>
 
-      <section class="launch-strip" aria-label="Product benefits">
+      <section class="offer-strip" aria-labelledby="offer-title" data-reveal>
+        <div>
+          <p>First order offer</p>
+          <h2 id="offer-title">Use FIRSTBITE for 20% off</h2>
+        </div>
+        <div class="offer-strip-price">
+          <span>MRP <s>INR 400</s></span>
+          <strong>INR 320</strong>
+          <span>after coupon</span>
+        </div>
+        <button class="coupon-code coupon-code-large" type="button" data-copy-coupon aria-label="Copy coupon code FIRSTBITE">
+          <span>Coupon code</span>
+          <b>FIRSTBITE</b>
+        </button>
+      </section>
+
+      <section class="launch-strip" aria-label="Product benefits" data-reveal>
         <span>High protein</span>
         <span>No added sugar</span>
         <span>Natural fats</span>
@@ -120,14 +134,14 @@
         <span>On-the-go nutrition</span>
       </section>
 
-      <section class="shop-section" id="shop" aria-labelledby="shop-title">
+      <section class="shop-section" id="shop" aria-labelledby="shop-title" data-reveal>
         <div class="section-heading">
           <p>Fuel your performance. Power every bite.</p>
           <h2 id="shop-title">Shop FuelBite</h2>
         </div>
 
         <div class="shop-grid">
-          <div class="product-gallery" aria-label="FuelBite product gallery">
+          <div class="product-gallery" aria-label="FuelBite product gallery" data-reveal>
             <div class="gallery-main">
               <img id="gallery-image" src="assets/fuelbite-pack.png" alt="Front and back of FuelBite resealable pouch">
             </div>
@@ -141,7 +155,7 @@
             </div>
           </div>
 
-          <article class="buy-panel" aria-labelledby="product-title">
+          <article class="buy-panel" aria-labelledby="product-title" data-reveal>
             <div class="product-topline">
               <span>Protein energy balls</span>
               <span>Dry fruits &amp; seeds blend</span>
@@ -152,12 +166,27 @@
             </p>
 
             <div class="price-row">
-              <div>
-                <strong>INR <span data-total-price>400</span></strong>
+              <div class="price-stack">
+                <span>After FIRSTBITE</span>
+                <strong>INR <span data-total-price>320</span></strong>
+                <s>INR <span data-regular-price>400</span></s>
                 <span>MRP incl. all taxes</span>
               </div>
               <a class="quick-whatsapp-link" href="https://wa.me/919847217286" target="_blank" rel="noopener">Ask on WhatsApp</a>
             </div>
+
+            <div class="coupon-card" aria-label="First order coupon">
+              <div>
+                <span>First order coupon</span>
+                <strong>Save 20% today</strong>
+                <p>Coupon FIRSTBITE is applied to your WhatsApp order.</p>
+              </div>
+              <button class="coupon-code" type="button" data-copy-coupon aria-label="Copy coupon code FIRSTBITE">
+                <span>Coupon</span>
+                <b>FIRSTBITE</b>
+              </button>
+            </div>
+            <p class="coupon-status" aria-live="polite" data-coupon-status>FIRSTBITE applied. You save INR <span data-discount-amount>80</span>. <span data-coupon-copy-status></span></p>
 
             <div class="pack-options" role="radiogroup" aria-label="Choose pack quantity">
               <button class="option is-selected" type="button" role="radio" aria-checked="true" data-packs="1">
@@ -190,6 +219,7 @@
             </div>
 
             <ul class="product-notes">
+              <li>First order coupon saves 20%.</li>
               <li>Store in a cool, dry place.</li>
               <li>Keep sealed after opening.</li>
               <li>Made in India.</li>
@@ -198,7 +228,7 @@
         </div>
       </section>
 
-      <section class="performance-section" id="performance" aria-labelledby="performance-title">
+      <section class="performance-section" id="performance" aria-labelledby="performance-title" data-reveal>
         <div class="section-heading light">
           <p>Real nutrition. Real performance.</p>
           <h2 id="performance-title">Made for the active day</h2>
@@ -249,7 +279,7 @@
         </div>
       </section>
 
-      <section class="nutrition-section" id="nutrition" aria-labelledby="nutrition-title">
+      <section class="nutrition-section" id="nutrition" aria-labelledby="nutrition-title" data-reveal>
         <div class="nutrition-copy">
           <div class="section-heading">
             <p>Approx. per 28 g bite</p>
@@ -294,7 +324,7 @@
         </div>
       </section>
 
-      <section class="ingredients-section" id="ingredients" aria-labelledby="ingredients-title">
+      <section class="ingredients-section" id="ingredients" aria-labelledby="ingredients-title" data-reveal>
         <div class="section-heading light">
           <p>Dates, nuts, seeds, nothing complicated.</p>
           <h2 id="ingredients-title">The blend inside</h2>
@@ -328,11 +358,11 @@
         </div>
       </section>
 
-      <section class="bundle-section" aria-labelledby="bundle-title">
+      <section class="bundle-section" aria-labelledby="bundle-title" data-reveal>
         <div>
           <h2 id="bundle-title">Build your FuelBite stack</h2>
           <p>
-            Select packs above or add one combo pack now. Each pack includes 12 bites and weighs 336 g.
+            Select packs above or add one combo pack now. Coupon FIRSTBITE saves 20% on your first order.
           </p>
         </div>
         <button class="button button-primary add-button" type="button">
@@ -344,7 +374,7 @@
         </button>
       </section>
 
-      <section class="faq-section" aria-labelledby="faq-title">
+      <section class="faq-section" aria-labelledby="faq-title" data-reveal>
         <div class="section-heading">
           <p>Product details</p>
           <h2 id="faq-title">Questions before you bite?</h2>
@@ -377,11 +407,20 @@
               <p>Store it in a cool, dry place and keep it sealed after opening.</p>
             </div>
           </article>
+          <article class="faq-item">
+            <button type="button" aria-expanded="false">
+              How do I use the first order coupon?
+              <span aria-hidden="true">+</span>
+            </button>
+            <div class="faq-panel" hidden>
+              <p>Use coupon FIRSTBITE. Your WhatsApp order message includes the 20% first order discount automatically.</p>
+            </div>
+          </article>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer" id="contact">
+    <footer class="site-footer" id="contact" data-reveal>
       <div class="footer-brand">
         <a class="brand" href="#top" aria-label="FuelBite home">
           <span class="brand-mark">FB</span>
@@ -416,9 +455,19 @@
       <div class="cart-body" data-cart-body>
         <p>Your bag is ready for FuelBite.</p>
       </div>
-      <div class="cart-total">
-        <span>Total</span>
-        <strong>INR <span data-cart-total>0</span></strong>
+      <div class="cart-summary">
+        <div>
+          <span>Subtotal</span>
+          <strong>INR <span data-cart-subtotal>0</span></strong>
+        </div>
+        <div>
+          <span>FIRSTBITE</span>
+          <strong>- INR <span data-cart-discount>0</span></strong>
+        </div>
+        <div class="cart-total">
+          <span>Total after coupon</span>
+          <strong>INR <span data-cart-total>0</span></strong>
+        </div>
       </div>
       <p class="whatsapp-note">Tap below to send your order details directly on WhatsApp.</p>
       <a class="button button-whatsapp checkout-link" data-whatsapp-link href="https://wa.me/919847217286" target="_blank" rel="noopener">
@@ -434,13 +483,14 @@
 
     <div class="mobile-order-bar" aria-label="Mobile order bar">
       <div>
-        <span>FuelBite Combo</span>
-        <strong>INR <span data-mobile-total>400</span></strong>
+        <span>FIRSTBITE applied</span>
+        <strong>INR <span data-mobile-total>320</span></strong>
+        <small><s>INR <span data-mobile-regular>400</span></s></small>
       </div>
       <a class="button button-whatsapp" data-whatsapp-link href="https://wa.me/919847217286" target="_blank" rel="noopener">WhatsApp</a>
     </div>
 
-    <script src="script.js?v=20260618-whatsapp"></script>
+    <script src="script.js?v=20260619-offer-scroll"></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -458,7 +508,7 @@
         "offers": {
           "@type": "Offer",
           "priceCurrency": "INR",
-          "price": "400",
+          "price": "320",
           "availability": "https://schema.org/InStock"
         }
       }

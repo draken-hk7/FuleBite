@@ -1,34 +1,53 @@
 const basePrice = 400;
 const productName = "FuelBite Combo Pack";
 const whatsappNumber = "919847217286";
+const couponCode = "FIRSTBITE";
+const discountRate = 0.2;
 
 const state = {
   packs: 1,
   quantity: 1,
   cartPacks: 0,
-  cartTotal: 0
+  cartSubtotal: 0
 };
 
 const totalPrice = document.querySelector("[data-total-price]");
+const regularPrice = document.querySelector("[data-regular-price]");
+const discountAmount = document.querySelector("[data-discount-amount]");
 const quantityOutput = document.querySelector("[data-quantity]");
 const cartCount = document.querySelector("[data-cart-count]");
 const cartBody = document.querySelector("[data-cart-body]");
+const cartSubtotal = document.querySelector("[data-cart-subtotal]");
+const cartDiscount = document.querySelector("[data-cart-discount]");
 const cartTotal = document.querySelector("[data-cart-total]");
 const cartDrawer = document.querySelector(".cart-drawer");
 const cartBackdrop = document.querySelector("[data-cart-backdrop]");
 const searchStatus = document.querySelector("[data-search-status]");
+const couponCopyStatus = document.querySelector("[data-coupon-copy-status]");
 const mobileTotal = document.querySelector("[data-mobile-total]");
+const mobileRegular = document.querySelector("[data-mobile-regular]");
 const selectionWhatsappLinks = document.querySelectorAll(".hero-whatsapp-link, .quick-whatsapp-link, .mobile-order-bar a");
 const checkoutWhatsappLinks = document.querySelectorAll(".checkout-link");
+const copyCouponButtons = document.querySelectorAll("[data-copy-coupon]");
+const revealTargets = document.querySelectorAll("[data-reveal]");
+const hero = document.querySelector("[data-hero]");
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 function formatPrice(value) {
   return new Intl.NumberFormat("en-IN").format(value);
 }
 
+function getDiscount(subtotal) {
+  return Math.round(subtotal * discountRate);
+}
+
 function updateSelection() {
-  const selectedTotal = basePrice * state.packs * state.quantity;
-  totalPrice.textContent = formatPrice(selectedTotal);
-  mobileTotal.textContent = formatPrice(selectedTotal);
+  const selectedOrder = getOrderSnapshot(false);
+  totalPrice.textContent = formatPrice(selectedOrder.total);
+  regularPrice.textContent = formatPrice(selectedOrder.subtotal);
+  discountAmount.textContent = formatPrice(selectedOrder.discount);
+  mobileTotal.textContent = formatPrice(selectedOrder.total);
+  mobileRegular.textContent = formatPrice(selectedOrder.subtotal);
   quantityOutput.value = state.quantity;
   quantityOutput.textContent = state.quantity;
   updateWhatsAppLinks();
@@ -36,10 +55,18 @@ function updateSelection() {
 
 function renderCart() {
   cartCount.textContent = state.cartPacks;
-  cartTotal.textContent = formatPrice(state.cartTotal);
+  const cartOrder = getOrderSnapshot(true);
+  cartSubtotal.textContent = formatPrice(state.cartPacks ? cartOrder.subtotal : 0);
+  cartDiscount.textContent = formatPrice(state.cartPacks ? cartOrder.discount : 0);
+  cartTotal.textContent = formatPrice(state.cartPacks ? cartOrder.total : 0);
 
   if (!state.cartPacks) {
-    cartBody.innerHTML = "<p>Choose your packs, then send the order on WhatsApp.</p>";
+    cartBody.innerHTML = `
+      <div class="cart-empty">
+        <p>Choose your packs, then send the order on WhatsApp.</p>
+        <button class="button button-primary cart-empty-add" type="button" data-cart-add-selection>Add selected pack</button>
+      </div>
+    `;
     updateWhatsAppLinks();
     return;
   }
@@ -47,11 +74,21 @@ function renderCart() {
   const bites = state.cartPacks * 12;
   cartBody.innerHTML = `
     <div class="cart-line">
-      <div>
-        <h3>${productName}</h3>
-        <p>${state.cartPacks} pack${state.cartPacks > 1 ? "s" : ""} / ${bites} bites</p>
+      <div class="cart-line-info">
+        <div>
+          <h3>${productName}</h3>
+          <p>${state.cartPacks} pack${state.cartPacks > 1 ? "s" : ""} / ${bites} bites with coupon ${couponCode}</p>
+        </div>
+        <strong><s>INR ${formatPrice(cartOrder.subtotal)}</s> INR ${formatPrice(cartOrder.total)}</strong>
       </div>
-      <strong>INR ${formatPrice(state.cartTotal)}</strong>
+      <div class="cart-line-actions">
+        <div class="cart-stepper" aria-label="Adjust pack quantity">
+          <button type="button" data-cart-change="-1" aria-label="Remove one pack">-</button>
+          <output aria-label="Packs in order">${state.cartPacks}</output>
+          <button type="button" data-cart-change="1" aria-label="Add one pack">+</button>
+        </div>
+        <button class="cart-remove" type="button" data-cart-remove>Remove</button>
+      </div>
     </div>
   `;
   updateWhatsAppLinks();
@@ -60,9 +97,11 @@ function renderCart() {
 function getOrderSnapshot(preferCart) {
   const useCart = preferCart && state.cartPacks;
   const packs = useCart ? state.cartPacks : state.packs * state.quantity;
-  const total = useCart ? state.cartTotal : basePrice * state.packs * state.quantity;
+  const subtotal = useCart ? state.cartSubtotal : basePrice * state.packs * state.quantity;
+  const discount = getDiscount(subtotal);
+  const total = subtotal - discount;
   const bites = packs * 12;
-  return { packs, total, bites };
+  return { packs, subtotal, discount, total, bites };
 }
 
 function buildWhatsAppUrl(preferCart) {
@@ -71,7 +110,10 @@ function buildWhatsAppUrl(preferCart) {
     "Hi FuelBite, I want to order:",
     `${productName}`,
     `Quantity: ${order.packs} pack${order.packs > 1 ? "s" : ""} / ${order.bites} bites`,
-    `Total: INR ${formatPrice(order.total)}`,
+    `Subtotal: INR ${formatPrice(order.subtotal)}`,
+    `Coupon: ${couponCode} - 20% first order offer`,
+    `Discount: INR ${formatPrice(order.discount)}`,
+    `Total after coupon: INR ${formatPrice(order.total)}`,
     "Please confirm availability and delivery details."
   ].join("\n");
 
@@ -85,7 +127,18 @@ function updateWhatsAppLinks() {
     link.href = selectionUrl;
   });
   checkoutWhatsappLinks.forEach((link) => {
-    link.href = checkoutUrl;
+    if (state.cartPacks) {
+      link.href = checkoutUrl;
+      link.classList.remove("is-disabled");
+      link.removeAttribute("aria-disabled");
+      link.removeAttribute("tabindex");
+      return;
+    }
+
+    link.removeAttribute("href");
+    link.classList.add("is-disabled");
+    link.setAttribute("aria-disabled", "true");
+    link.setAttribute("tabindex", "-1");
   });
 }
 
@@ -126,9 +179,41 @@ document.querySelectorAll("[data-quantity-change]").forEach((button) => {
 document.querySelectorAll(".add-button").forEach((button) => {
   button.addEventListener("click", () => {
     state.cartPacks += state.packs * state.quantity;
-    state.cartTotal += basePrice * state.packs * state.quantity;
+    state.cartSubtotal += basePrice * state.packs * state.quantity;
     renderCart();
     openCart();
+  });
+});
+
+cartBody.addEventListener("click", (event) => {
+  const changeButton = event.target.closest("[data-cart-change]");
+  const removeButton = event.target.closest("[data-cart-remove]");
+  const addSelectionButton = event.target.closest("[data-cart-add-selection]");
+
+  if (addSelectionButton) {
+    state.cartPacks = state.packs * state.quantity;
+    state.cartSubtotal = state.cartPacks * basePrice;
+    renderCart();
+    return;
+  }
+
+  if (changeButton) {
+    state.cartPacks = Math.max(0, state.cartPacks + Number(changeButton.dataset.cartChange));
+    state.cartSubtotal = state.cartPacks * basePrice;
+    renderCart();
+    return;
+  }
+
+  if (removeButton) {
+    state.cartPacks = 0;
+    state.cartSubtotal = 0;
+    renderCart();
+  }
+});
+
+copyCouponButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    copyCouponCode();
   });
 });
 
@@ -230,5 +315,115 @@ function showSearchStatus(message) {
   }, 2200);
 }
 
+function showCouponStatus(message) {
+  if (!couponCopyStatus) {
+    return;
+  }
+
+  couponCopyStatus.textContent = message;
+}
+
+function copyCouponCode() {
+  const copiedMessage = `Coupon ${couponCode} copied. It is already included in your WhatsApp order.`;
+  const fallbackCopy = () => {
+    const field = document.createElement("textarea");
+    field.value = couponCode;
+    field.setAttribute("readonly", "");
+    field.style.position = "fixed";
+    field.style.left = "-9999px";
+    document.body.append(field);
+    field.select();
+    document.execCommand("copy");
+    field.remove();
+    showCouponStatus(copiedMessage);
+  };
+
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(couponCode).then(() => {
+      showCouponStatus(copiedMessage);
+    }).catch(fallbackCopy);
+    return;
+  }
+
+  fallbackCopy();
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function updateHeroMotion() {
+  if (!hero || reducedMotionQuery.matches) {
+    return;
+  }
+
+  const rect = hero.getBoundingClientRect();
+  const distance = Math.max(1, rect.height * 0.82);
+  const progress = clamp(-rect.top / distance, 0, 1);
+
+  hero.style.setProperty("--hero-copy-y", `${progress * -34}px`);
+  hero.style.setProperty("--hero-copy-opacity", String(1 - progress * 0.32));
+  hero.style.setProperty("--hero-stage-y", `${progress * 28}px`);
+  hero.style.setProperty("--hero-stage-scale", String(1 + progress * 0.08));
+  hero.style.setProperty("--hero-image-scale", String(1 + progress * 0.06));
+  hero.style.setProperty("--hero-offer-y", `${progress * -18}px`);
+  hero.style.setProperty("--hero-offer-opacity", String(1 - progress * 0.18));
+}
+
+function initHeroMotion() {
+  if (!hero || reducedMotionQuery.matches) {
+    return;
+  }
+
+  let isScheduled = false;
+  const scheduleHeroUpdate = () => {
+    if (isScheduled) {
+      return;
+    }
+
+    isScheduled = true;
+    window.requestAnimationFrame(() => {
+      updateHeroMotion();
+      isScheduled = false;
+    });
+  };
+
+  updateHeroMotion();
+  window.addEventListener("scroll", scheduleHeroUpdate, { passive: true });
+  window.addEventListener("resize", scheduleHeroUpdate);
+}
+
+function initScrollReveals() {
+  if (!revealTargets.length) {
+    return;
+  }
+
+  if (reducedMotionQuery.matches || !("IntersectionObserver" in window)) {
+    revealTargets.forEach((target) => target.classList.add("is-visible"));
+    return;
+  }
+
+  document.body.classList.add("reveal-ready");
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) {
+        return;
+      }
+
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+  }, {
+    rootMargin: "0px 0px -12% 0px",
+    threshold: 0.12
+  });
+
+  revealTargets.forEach((target) => {
+    revealObserver.observe(target);
+  });
+}
+
 updateSelection();
 renderCart();
+initHeroMotion();
+initScrollReveals();
